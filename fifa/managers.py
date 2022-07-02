@@ -25,15 +25,10 @@ class PlayerManager(models.Manager):
             "position",
         )
 
+    def get_player_by_id(self, id_player):
+        return self.filter(id=id_player)
+
     def create_player(self, data):
-        #     data["player_photo"]
-        # and data["name"]
-        # and data["last_name"]
-        # and data["birth_date"]
-        # and data["team_id"]
-        # and data["titular"]
-        # and data["shirt_number"]
-        # and data["position"]
         return self.create(
             player_photo=data["player_photo"],
             name=data["name"],

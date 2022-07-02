@@ -53,9 +53,6 @@ def validate_player(data: dict):
     # Validar que el equipo existe
     team = Team.own_manager.get_team_by_id(data["team_id"]).first()
     if team:
-
-        
-
         try:
 
             titular_bool = to_bool(data["titular"])
@@ -78,19 +75,39 @@ def validate_player(data: dict):
         print("esta es la cantidad de camisetas -> ", count_player_shirt)
         # Validar que no se repita la misma camisa por equipo
         if count_player_shirt != 0:
-            res["respuesta"] = "No puede registrar a otro jugador con la misma camiseta"
+            res[
+                "respuesta"
+            ] = "No puede registrar a otro jugador con la misma camiseta en ese equipo"
             return res
-        # print(
-        #     count_player_titular,
-        #     data["titular"],
-        #     type(data["titular"]),
-        #     titular_bool,
-        # )
+        # Validar que se encuentre la posicion en las opciones
+        position = validate_position_exist(data["position"])
+        if not position:
+            res[
+                "respuesta"
+            ] = f"No existe la posicion {data['position']} recuerde que solo estan estas {get_positions()}"
+            return res
+        data["position"] = position
+
         return data
     else:
         res["respuesta"] = f"No existe el equipo con el id {data['team_id']} en la bd!"
         return res
 
 
+def get_positions():
+    """
+    Esta funcion me entrega todas las posiciones posibles
+    """
+    return [i[1] for i in Player.POSITION_OPTIONS]
+
+
 def validate_position_exist(position):
-    Player.POSITION_OPTIONS
+    """
+    Esta funcion valida si la posicion enviada existe
+    """
+    positions_str = [i[1] for i in Player.POSITION_OPTIONS]
+    position = position.capitalize()
+    result = list(filter(lambda x: x[1] == position, Player.POSITION_OPTIONS))
+    if not result:
+        return False
+    return result[0][0]

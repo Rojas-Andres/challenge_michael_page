@@ -16,6 +16,7 @@ from fifa.utils import (
     validate_team_by_id,
     to_bool,
     validate_player,
+    validate_position_exist,
 )
 from fifa.models import Player
 
@@ -49,22 +50,12 @@ class PlayerViewSet(viewsets.ModelViewSet):
             all_players = Player.own_manager.all_player()
             if not all_players:
                 return Response({"respuesta": "No hay jugadores en la base de datos!"})
-            return Response(all_teams)
+            return Response(all_players)
 
     def create(self, request, *args, **kwargs):
         data = request.data
         res = {}
         try:
-            #             return self.all().values(
-            #     "player_photo",
-            #     "name",
-            #     "last_name",
-            #     "birth_date",
-            #     "team__name_team",
-            #     "titular",
-            #     "shirt_number",
-            #     "position",
-            # )
             if (
                 data["player_photo"]
                 and data["name"]
@@ -79,7 +70,8 @@ class PlayerViewSet(viewsets.ModelViewSet):
                 if "respuesta" in player:
                     return Response(player, status=status.HTTP_400_BAD_REQUEST)
                 new_player = Player.own_manager.create_player(data)
-                return Response("asdas")
+                new_player.save()
+                return Response({"respuesta": "Jugador creado correctamente!"})
 
         except KeyError as e:
             res[str(e)] = "Este campo es requerido"
@@ -127,10 +119,10 @@ class PlayerViewSet(viewsets.ModelViewSet):
         )
 
     def destroy(self, request, *args, **kwargs):
-        team = Team.own_manager.get_team_by_id(kwargs["pk"]).first()
-        if team:
-            team.delete()
-            return Response({"respuesta": "Equipo eliminado correctamente"})
+        player = Player.own_manager.get_player_by_id(kwargs["pk"]).first()
+        if player:
+            player.delete()
+            return Response({"respuesta": "Jugador eliminado correctamente"})
         return Response(
-            {"respuesta": f"No se encuentra el equipo con el id {kwargs['pk']}"}
+            {"respuesta": f"No se encuentra el jugador con el id {kwargs['pk']}"}
         )
