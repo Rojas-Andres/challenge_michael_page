@@ -6,11 +6,10 @@ from django.db.models import F
 
 class CountryManager(models.Manager):
     def filter_country_by_name(self, country):
-        return self.filter(name_country=country)
+        return self.filter(name_country=country.upper())
 
     def create_country(self, country):
-        updated_at = datetime.now()
-        return self.create(name_country=country, updated_at=updated_at)
+        return self.create(name_country=country)
 
 
 class TeamManager(models.Manager):
@@ -18,12 +17,14 @@ class TeamManager(models.Manager):
         return self.filter(name_team=team)
 
     def filter_team_by_country(self, country_id):
-        return self.filter(country_id=country_id).get()
+        return self.filter(country_id=country_id)
+
+    def filter_team_by_country_name(self, country_name):
+        return self.filter(country__name_country=country_name)
 
     def all_teams(self):
         return self.all().values(
             "id",
-            "created_at",
             "name_team",
             "flag_photo",
             "shield_photo",
@@ -31,13 +32,11 @@ class TeamManager(models.Manager):
         )
 
     def create_team(self, data, id_country):
-        updated_at = datetime.now()
         return self.create(
             name_team=data["name_team"],
             flag_photo=data["flag_photo"],
             shield_photo=data["shield_photo"],
             country_id=id_country,
-            updated_at=updated_at,
         )
 
     def get_team_by_id(self, id_team):

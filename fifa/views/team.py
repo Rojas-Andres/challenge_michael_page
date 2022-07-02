@@ -24,7 +24,9 @@ class TeamViewSet(viewsets.ModelViewSet):
             get_country = Country.own_manager.filter_country_by_name(country.upper())
             if get_country:
                 # Obtener el equipo referente a ese pais
-                team = Team.own_manager.filter_team_by_country(get_country.get().id)
+                team = Team.own_manager.filter_team_by_country(
+                    get_country.get().id
+                ).get()
                 serializer_context = {
                     "request": request,
                 }
@@ -58,19 +60,28 @@ class TeamViewSet(viewsets.ModelViewSet):
                     id_country = country.get().id
                     team_db = validate_team(data["name_team"])
                     if not team_db:
-                        team = Team.own_manager.create_team(data, id_country)
-
-                        team.save()
-                        serializer_context = {
-                            "request": request,
-                        }
-                        serializer = TeamSerializer(
-                            team, many=False, context=serializer_context
+                        # Validar que ya no exista un equipo con ese pais
+                        team_c = Team.own_manager.filter_team_by_country_name(
+                            data["country"]
                         )
-                        if serializer:
-                            return Response(
-                                serializer.data, status=status.HTTP_201_CREATED
+                        if not team_c:
+                            team = Team.own_manager.create_team(data, id_country)
+
+                            team.save()
+                            serializer_context = {
+                                "request": request,
+                            }
+                            serializer = TeamSerializer(
+                                team, many=False, context=serializer_context
                             )
+                            if serializer:
+                                return Response(
+                                    serializer.data, status=status.HTTP_201_CREATED
+                                )
+                        else:
+                            res[
+                                "respuesta"
+                            ] = "Ya se encuentra un equipo creado con ese pais"
                     else:
                         res[
                             "respuesta"
@@ -88,16 +99,69 @@ class TeamViewSet(viewsets.ModelViewSet):
         team = Team.own_manager.get_team_by_id(kwargs["pk"]).first()
         if team:
             data = request.data
-            if data["name_team"] and team.name_team != data["name_team"]:
-                team.name_team = data["title"]
-            if data["flag_photo"] and team.name_team != data["flag_photo"]:
-                team.flag_photo = data["flag_photo"]
-            if data["shield_photo"] and team.name_team != data["shield_photo"]:
-                team.shield_photo = data["shield_photo"]
-            if data["country"] and team.name_team != data["country"]:
-                pass
+            if (
+                "name_team" in data
+                or "flag_photo" in data
+                or "shield_photo" in data
+                or "country" in data
+            ):
+
+                if "name_team" in data and team.name_team != data["name_team"]:
+                    team.name_team = data["title"]
+                if "flag_photo" in data and team.name_team != data["flag_photo"]:
+                    team.flag_photo = data["flag_photo"]
+                if "shield_photo" in data and team.name_team != data["shield_photo"]:
+                    team.shield_photo = data["shield_photo"]
+                if "country" in data and team.name_team != data["country"]:
+                    team.country = data["country"]
+                team.save()
+                return Response({"respuesta": "Equipo actualizado satisfactoriamente!"})
+            else:
+                return Response(
+                    {
+                        "respuesta": "Recuerde que debe de enviar al menos uno de estos [name_team,flag_photo,shield_photo,country] "
+                    }
+                )
+        return Response(
+            {"respuesta": f"No se encuentra el equipo con el id {kwargs['pk']}"}
+        )
+
+    def partial_update(self, request, *args, **kwargs):
+        team = Team.own_manager.get_team_by_id(kwargs["pk"]).first()
+        if team:
+            data = request.data
+            # Filtramos pais para saber si existe
+            if "country" in data:
+                country = Country.own_manager.filter_country_by_name(data["country"])
+                if not country:
+                    return Response(
+                        {
+                            "respuesta": f"No se encuentra el pais {data['country']} para actualizar "
+                        }
+                    )
+                # Filtramos si ya hay algun equipo relacionado con ese pais , teniendo en cuenta que un solo equipo puede pertener a un pais
+                get_team = Team.own_manager.filter_team_by_country(country.get().id)
+                if get_team:
+
+                    if (
+                        get_team.get().id != team.id
+                    ):  # Validamos que no haya ningun equipo creado
+                        return Response(
+                            {
+                                "respuesta": f"Ya se encuentra un equipo relacionado con ese pais {data['country']}"
+                            }
+                        )
+                else:
+                    team.country_id = country.get().id
+            team.name_team = data.get("name_team", team.name_team)
+            team.flag_photo = data.get("flag_photo", team.flag_photo)
+            team.shield_photo = data.get("shield_photo", team.shield_photo)
+
             team.save()
-            return Response({"respuesta": "Equipo actualizado satisfactoriamente!"})
+
+            serializer = TeamSerializer(team)
+            return Response(serializer.data)
+
         return Response(
             {"respuesta": f"No se encuentra el equipo con el id {kwargs['pk']}"}
         )

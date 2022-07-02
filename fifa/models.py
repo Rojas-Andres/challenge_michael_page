@@ -6,9 +6,7 @@ from . import managers
 
 
 class Country(models.Model):
-    created_at = models.DateTimeField(auto_now=True, editable=False)
     name_country = models.CharField(max_length=255)
-    updated_at = models.DateTimeField(blank=True, null=True)
     own_manager = managers.CountryManager()
 
     class Meta:
@@ -21,7 +19,6 @@ class Country(models.Model):
 
 
 class Team(models.Model):
-    created_at = models.DateTimeField(auto_now=True, editable=False)
     name_team = models.CharField(verbose_name="Nombre del equipo", max_length=255)
     flag_photo = models.ImageField(
         verbose_name="Foto de la bandera", upload_to="uploads/flag"
@@ -29,7 +26,6 @@ class Team(models.Model):
     shield_photo = models.ImageField(
         verbose_name="Foto del escudo", upload_to="uploads/shield"
     )
-    updated_at = models.DateTimeField(blank=True, null=True)
     country = models.OneToOneField(Country, on_delete=models.CASCADE)
     own_manager = managers.TeamManager()
 
@@ -43,7 +39,6 @@ class Team(models.Model):
 
 
 class Player(models.Model):
-    created_at = models.DateTimeField(auto_now=True, editable=False)
     player_photo = models.ImageField(
         verbose_name="Foto del jugador", upload_to="uploads/shield"
     )
@@ -51,7 +46,6 @@ class Player(models.Model):
     last_name = models.CharField(verbose_name="Apellido(s)", max_length=255)
     birth_date = models.DateTimeField(verbose_name="Fecha de nacimiento")
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    updated_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         verbose_name = "Player"
@@ -79,12 +73,10 @@ class CoachingStaff(models.Model):
         (DOCTOR, "Medico"),
         (TRAINER, "Preparador"),
     ]
-    created_at = models.DateTimeField(auto_now=True, editable=False)
     name = models.CharField(verbose_name="Nombre(s)", max_length=255)
     last_name = models.CharField(verbose_name="Apellido(s)", max_length=255)
     birth_date = models.DateTimeField(verbose_name="Fecha de nacimiento")
     nacionality = models.ForeignKey(Country, on_delete=models.CASCADE)
-    updated_at = models.DateTimeField(blank=True, null=True)
     rol = models.CharField("Rol", max_length=12, choices=ROL_OPTIONS)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
 
