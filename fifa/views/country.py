@@ -1,0 +1,41 @@
+from django.shortcuts import render, get_object_or_404
+
+# Create your views here.
+from rest_framework.response import Response
+
+# from rest_framework.views import viewsets
+from rest_framework import viewsets, status, generics
+
+from rest_framework.decorators import api_view
+from fifa.serializers import TeamSerializer
+from fifa.models import Team
+from rest_framework.decorators import action
+from fifa.utils import validate_country, validate_team
+from fifa.models import Country
+
+
+@api_view(["POST"])
+def create_country(request):
+    """
+    Esta api se encarga de crear el pais
+    """
+    data = request.data
+    res = {}
+    try:
+        if data["country"]:
+            get_country = validate_country(data["country"])
+            if not get_country:
+                country = Country.own_manager.create_country(data["country"].upper())
+                country.save()
+                res[
+                    "respuesta"
+                ] = f"Pais {data['country'].upper()} creado satisfactoriamente"
+            else:
+                res[
+                    "respuesta"
+                ] = f"El pais {data['country'].upper()} ya existe en la base de datos."
+            pass
+    except KeyError as e:
+        res[str(e)] = "Este campo es requerido"
+
+    return Response(res, status=status.HTTP_404_NOT_FOUND)
