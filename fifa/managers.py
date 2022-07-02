@@ -12,6 +12,46 @@ class CountryManager(models.Manager):
         return self.create(name_country=country)
 
 
+class PlayerManager(models.Manager):
+    def all_player(self):
+        return self.all().values(
+            "player_photo",
+            "name",
+            "last_name",
+            "birth_date",
+            "team__name_team",
+            "titular",
+            "shirt_number",
+            "position",
+        )
+
+    def create_player(self, data):
+        #     data["player_photo"]
+        # and data["name"]
+        # and data["last_name"]
+        # and data["birth_date"]
+        # and data["team_id"]
+        # and data["titular"]
+        # and data["shirt_number"]
+        # and data["position"]
+        return self.create(
+            player_photo=data["player_photo"],
+            name=data["name"],
+            last_name=data["last_name"],
+            birth_date=data["birth_date"],
+            team_id=data["team_id"],
+            titular=data["titular"],
+            shirt_number=data["shirt_number"],
+            position=data["position"],
+        )
+
+    def count_titular_by_team(self, team_id):
+        return self.filter(team_id=team_id, titular=True).count()
+
+    def count_shirt_by_team(self, team_id, shirt_number):
+        return self.filter(team_id=team_id, shirt_number=shirt_number).count()
+
+
 class TeamManager(models.Manager):
     def filter_team_by_name(self, team):
         return self.filter(name_team=team)

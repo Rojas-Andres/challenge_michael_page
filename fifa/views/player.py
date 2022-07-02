@@ -10,17 +10,23 @@ from rest_framework.decorators import api_view
 from fifa.serializers import TeamSerializer
 from fifa.models import Team
 from rest_framework.decorators import action
-from fifa.utils import validate_country, validate_team
-from fifa.models import Country
+from fifa.utils import (
+    validate_country,
+    validate_team,
+    validate_team_by_id,
+    to_bool,
+    validate_player,
+)
+from fifa.models import Player
 
 
-class TeamViewSet(viewsets.ModelViewSet):
+class PlayerViewSet(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
     queryset = Team.own_manager.all_teams()
 
     def list(self, request):
-        country = request.GET.get("country")
-        if country:
+        id_player = request.GET.get("id")
+        if id_player:
             get_country = Country.own_manager.filter_country_by_name(country.upper())
             if get_country:
                 # Obtener el equipo referente a ese pais
@@ -40,56 +46,41 @@ class TeamViewSet(viewsets.ModelViewSet):
                     {"response": f"No existe el pais {country} en la base de datos"}
                 )
         else:
-            all_teams = Team.own_manager.all_teams()
-            if not all_teams:
-                return Response({"respuesta": "No hay equipos en la base de datos!"})
+            all_players = Player.own_manager.all_player()
+            if not all_players:
+                return Response({"respuesta": "No hay jugadores en la base de datos!"})
             return Response(all_teams)
 
     def create(self, request, *args, **kwargs):
         data = request.data
         res = {}
         try:
+            #             return self.all().values(
+            #     "player_photo",
+            #     "name",
+            #     "last_name",
+            #     "birth_date",
+            #     "team__name_team",
+            #     "titular",
+            #     "shirt_number",
+            #     "position",
+            # )
             if (
-                data["name_team"]
-                and data["flag_photo"]
-                and data["shield_photo"]
-                and data["country"]
+                data["player_photo"]
+                and data["name"]
+                and data["last_name"]
+                and data["birth_date"]
+                and data["team_id"]
+                and data["titular"]
+                and data["shirt_number"]
+                and data["position"]
             ):
-                country = validate_country(data["country"])
-                if country:
-                    id_country = country.get().id
-                    team_db = validate_team(data["name_team"])
-                    if not team_db:
-                        # Validar que ya no exista un equipo con ese pais
-                        team_c = Team.own_manager.filter_team_by_country_name(
-                            data["country"]
-                        )
-                        if not team_c:
-                            team = Team.own_manager.create_team(data, id_country)
+                player = validate_player(data)
+                if "respuesta" in player:
+                    return Response(player, status=status.HTTP_400_BAD_REQUEST)
+                new_player = Player.own_manager.create_player(data)
+                return Response("asdas")
 
-                            team.save()
-                            serializer_context = {
-                                "request": request,
-                            }
-                            serializer = TeamSerializer(
-                                team, many=False, context=serializer_context
-                            )
-                            if serializer:
-                                return Response(
-                                    serializer.data, status=status.HTTP_201_CREATED
-                                )
-                        else:
-                            res[
-                                "respuesta"
-                            ] = "Ya se encuentra un equipo creado con ese pais"
-                    else:
-                        res[
-                            "respuesta"
-                        ] = f"El equipo {data['name_team']} ya se encuentra creado en la base de datos"
-                else:
-                    res[
-                        "response"
-                    ] = f"El pais {data['country']} no se encuentra en la base de datos"
         except KeyError as e:
             res[str(e)] = "Este campo es requerido"
 

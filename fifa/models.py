@@ -39,6 +39,16 @@ class Team(models.Model):
 
 
 class Player(models.Model):
+    GOALKEEPER = "GK"
+    DEFENSE = "DF"
+    Midfielder = "MD"
+    FORWARD = "FW"
+    POSITION_OPTIONS = [
+        (GOALKEEPER, "Arquero"),
+        (DEFENSE, "Defensa"),
+        (Midfielder, "Centrocampista"),
+        (FORWARD, "Delantero"),
+    ]
     player_photo = models.ImageField(
         verbose_name="Foto del jugador", upload_to="uploads/shield"
     )
@@ -46,6 +56,10 @@ class Player(models.Model):
     last_name = models.CharField(verbose_name="Apellido(s)", max_length=255)
     birth_date = models.DateTimeField(verbose_name="Fecha de nacimiento")
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    titular = models.BooleanField(verbose_name="Titular", default=False)
+    shirt_number = models.CharField(verbose_name="Numero de camiseta", max_length=255)
+    position = models.CharField("Position", max_length=18, choices=POSITION_OPTIONS)
+    own_manager = managers.PlayerManager()
 
     class Meta:
         verbose_name = "Player"
