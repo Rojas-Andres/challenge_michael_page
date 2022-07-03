@@ -27,4 +27,4 @@ class PlayerSerializer(serializers.ModelSerializer):
 class CoachingStaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = CoachingStaff
-        fields = ("name", "last_name", "birth_date", "nacionality_id", "rol")
+        fields = ("name", "last_name", "birth_date", "nacionality_id", "rol", "team")

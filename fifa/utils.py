@@ -145,3 +145,11 @@ def validate_rol_exist(rol: str):
     if not result:
         return False
     return result[0][0]
+
+
+def validate_nacionality_exist(nacionality_id: int):
+    country = Country.own_manager.filter_country_by_id(nacionality_id)
+    if not country:
+        return None
+    else:
+        return country
