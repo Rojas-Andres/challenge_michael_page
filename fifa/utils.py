@@ -1,5 +1,5 @@
 from .models import Country, Team, Player, CoachingStaff
-from datetime import datetime
+from datetime import datetime, date
 
 
 def validate_country(country: str):
@@ -66,7 +66,13 @@ def validate_player_create(data: dict):
     except ValueError:
         res["respuesta"] = "Recuerde el formato fecha YYYY-MM-DD (AÑO-MES-DIA)"
         return res
-
+    # Validar que el jugador no tenga menos de 15 años
+    age = calculate_age(birth_date_cast)
+    if age < 15:
+        res[
+            "respuesta"
+        ] = "El jugador que desea inscribir no puede tener menos de 15 años"
+        return res
     # Validar que el equipo existe
     team = Team.own_manager.get_team_by_id(data["team_id"]).first()
     if team:
@@ -153,3 +159,20 @@ def validate_nacionality_exist(nacionality_id: int):
         return None
     else:
         return country
+
+
+def calculate_age(birth_date):
+    today = date.today()
+    return (
+        today.year
+        - birth_date.year
+        - ((today.month, today.day) < (birth_date.month, birth_date.day))
+    )
+
+
+def calculate_avg_age(data: list):
+    ages = []
+    for i in data:
+        ages.append(calculate_age(i["birth_date"]))
+    avg_age = sum(ages) / len(ages)
+    return avg_age

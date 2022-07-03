@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-from fifa.utils import validate_country
+from fifa.utils import validate_country, calculate_avg_age
 from fifa.models import Country, Team, Player
 from fifa.serializers import CountrySerializer, PlayerSerializer
 from fifa.functions import Queries
@@ -82,9 +82,39 @@ def get_avg_alternate_player_by_team(request):
     """
     Esta api se encarga de devolver el promedio de jugadores suplentes por equipo
     """
-    query = Queries.get_avg_alternate_player()
-    cursor = connection.cursor()
-    cursor.execute(query)
-    data = cursor.fetchall()
-    data = [{"equipo": i[0], "promedio": i[1]} for i in data]
-    return Response(data, status=status.HTTP_200_OK)
+    # query = Queries.get_avg_alternate_player()
+    # cursor = connection.cursor()
+    # cursor.execute(query)
+    # data = cursor.fetchall()
+    # data = [{"equipo": i[0], "promedio": i[1]} for i in data]
+    pl = Player.own_manager.get_avg_alternate_player_by_team()
+    dic = {}
+    for i in pl:
+        if i.team__name_team in dic:
+            pass
+        else:
+            dic[i.team__name_team] = {}
+    return Response("ok", status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def get_max_player_team(request):
+    """
+    Esta api se encarga de devolver el equipo que mas registro jugadores
+    """
+    alternate_players = Player.own_manager.count_all_alternate_player()
+    return Response({"respuesta": alternate_players}, status=status.HTTP_200_OK)
+
+
+# falta
+
+
+#
+@api_view(["GET"])
+def get_avg_players(request):
+    """
+    Esta api se encarga de devolver la edad promedio de los jugadores
+    """
+    players_birth_date = Player.own_manager.get_birth_date_all()
+    avg_ages = calculate_avg_age(players_birth_date)
+    return Response({"respuesta": avg_ages}, status=status.HTTP_200_OK)

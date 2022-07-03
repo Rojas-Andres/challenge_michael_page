@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from django.db.models import Count, Subquery, IntegerField
 
 from django.db.models import F
 
@@ -69,6 +70,16 @@ class PlayerManager(models.Manager):
 
     def get_old_player(self):
         return self.all().order_by("birth_date")
+
+    def get_avg_alternate_player_by_team(self):
+        return (
+            self.all()
+            .values("team__name_team", "titular")
+            .annotate(dcount=Count("team_id"))
+        )
+
+    def get_birth_date_all(self):
+        return self.all().values("birth_date")
 
 
 class CoachingStaffManager(models.Manager):

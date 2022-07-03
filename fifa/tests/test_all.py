@@ -34,7 +34,7 @@ class TestAll(TestCase):
             "player_photo": image_mock,
             "name": "Andres",
             "last_name": "Rojas",
-            "birth_date": "2020-04-12",
+            "birth_date": "2000-04-12",
             "team_id": 1,
             "shirt_number": number_shirt,
             "titular": True,

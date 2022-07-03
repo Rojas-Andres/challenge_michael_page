@@ -29,6 +29,11 @@ urlpatterns = [
         fifa_endpoints.get_avg_alternate_player_by_team,
         name="PromedioEquipoJugadorSuplente",
     ),
+    path(
+        "get_avg_age_players",
+        fifa_endpoints.get_avg_players,
+        name="PromedioEdadJugadores",
+    ),
 ]
 # urlpatterns = [
 #     path("", include(router.urls)),

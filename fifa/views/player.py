@@ -117,6 +117,14 @@ class PlayerViewSet(viewsets.ModelViewSet):
                         "respuesta"
                     ] = "Recuerde el formato fecha YYYY-MM-DD (AÑO-MES-DIA)"
                     return Response(res, status=status.HTTP_400_BAD_REQUEST)
+                # Validar que el jugador no tenga menos de 15 años
+                age = calculate_age(date)
+                if age < 15:
+                    res[
+                        "respuesta"
+                    ] = "El jugador que desea inscribir no puede tener menos de 15 años"
+                    return Response(res, status=status.HTTP_400_BAD_REQUEST)
+
             else:
                 date = player.birth_date.strftime("%Y-%m-%d")
             new_dict["birth_date"] = date
