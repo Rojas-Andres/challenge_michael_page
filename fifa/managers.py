@@ -119,6 +119,9 @@ class CoachingStaffManager(models.Manager):
             "team__name_team",
         )
 
+    def get_old_coach(self, rol):
+        return self.filter(rol=rol).order_by("birth_date")
+
 
 class TeamManager(models.Manager):
     def filter_team_by_name(self, team):
