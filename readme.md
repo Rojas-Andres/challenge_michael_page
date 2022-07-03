@@ -61,6 +61,8 @@ python manage.py test
 
 		Se valida que el pais exista en la base de datos.
 
+        Se valida que no se puedan crear mas de 32 equipos ya que solo son 32 equipos que van al mundial.
+
 	Actualizacion equipo(Metodo PATCH):
 
 		Se valida que el pais exista para la actualizacion del equipo
