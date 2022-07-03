@@ -71,7 +71,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "rebus.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -82,6 +81,7 @@ DATABASES = {
     }
 }
 
+TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

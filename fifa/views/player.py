@@ -21,6 +21,7 @@ from fifa.utils import (
     get_positions,
 )
 from fifa.models import Player
+from django.http import HttpResponse
 
 
 class PlayerViewSet(viewsets.ModelViewSet):
@@ -71,6 +72,12 @@ class PlayerViewSet(viewsets.ModelViewSet):
                 player = validate_player_create(data)
                 if "respuesta" in player:
                     return Response(player, status=status.HTTP_400_BAD_REQUEST)
+                    # return JsonResponse(
+                    #     json.dumps(player),
+                    #     content_type="application/json",
+                    #     safe=False,
+                    # )
+
                 new_player = Player.own_manager.create_player(data)
                 new_player.save()
                 return Response({"respuesta": "Jugador creado correctamente!"})
