@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets, status, generics
 
 from rest_framework.decorators import api_view
-from fifa.serializers import TeamSerializer
+from fifa.serializers import PlayerSerializer
 from fifa.models import Team
 from rest_framework.decorators import action
 from fifa.utils import (
@@ -15,15 +15,17 @@ from fifa.utils import (
     validate_team,
     validate_team_by_id,
     to_bool,
-    validate_player,
+    validate_player_create,
     validate_position_exist,
+    convert_date,
+    get_positions,
 )
 from fifa.models import Player
 
 
 class PlayerViewSet(viewsets.ModelViewSet):
-    serializer_class = TeamSerializer
-    queryset = Team.own_manager.all_teams()
+    serializer_class = PlayerSerializer
+    queryset = Player.own_manager.all_player()
 
     def list(self, request):
         id_player = request.GET.get("id")
@@ -66,7 +68,7 @@ class PlayerViewSet(viewsets.ModelViewSet):
                 and data["shirt_number"]
                 and data["position"]
             ):
-                player = validate_player(data)
+                player = validate_player_create(data)
                 if "respuesta" in player:
                     return Response(player, status=status.HTTP_400_BAD_REQUEST)
                 new_player = Player.own_manager.create_player(data)
@@ -79,39 +81,89 @@ class PlayerViewSet(viewsets.ModelViewSet):
         return Response(res, status=status.HTTP_400_BAD_REQUEST)
 
     def partial_update(self, request, *args, **kwargs):
-        team = Team.own_manager.get_team_by_id(kwargs["pk"]).first()
-        if team:
+        player = Player.own_manager.get_player_by_id(kwargs["pk"]).first()
+        res = {}
+        if player:
             data = request.data
-            # Filtramos pais para saber si existe
-            if "country" in data:
-                country = Country.own_manager.filter_country_by_name(data["country"])
-                if not country:
-                    return Response(
-                        {
-                            "respuesta": f"No se encuentra el pais {data['country']} para actualizar "
-                        }
-                    )
-                # Filtramos si ya hay algun equipo relacionado con ese pais , teniendo en cuenta que un solo equipo puede pertener a un pais
-                get_team = Team.own_manager.filter_team_by_country(country.get().id)
-                if get_team:
-
-                    if (
-                        get_team.get().id != team.id
-                    ):  # Validamos que no haya ningun equipo creado
-                        return Response(
-                            {
-                                "respuesta": f"Ya se encuentra un equipo relacionado con ese pais {data['country']}"
-                            }
-                        )
+            new_dict = {}
+            # Validamos que al equipo que quiera actualizar exista
+            if "team_id" in data:
+                team = Team.own_manager.get_team_by_id(data["team_id"]).first()
+                if team:
+                    new_dict["team_id"] = data["team_id"]
                 else:
-                    team.country_id = country.get().id
-            team.name_team = data.get("name_team", team.name_team)
-            team.flag_photo = data.get("flag_photo", team.flag_photo)
-            team.shield_photo = data.get("shield_photo", team.shield_photo)
+                    res[
+                        "respuesta"
+                    ] = f"No existe el equipo con el id {data['team_id']} en la bd!"
+                    return res
+            else:
+                new_dict["team_id"] = player.team_id
 
-            team.save()
+            # Validar fecha
+            if "birth_date" in data:
+                date = convert_date(data["birth_date"])
+                if not date:
+                    res[
+                        "respuesta"
+                    ] = "Recuerde el formato fecha YYYY-MM-DD (AÑO-MES-DIA)"
+                    return Response(res, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                date = player.birth_date.strftime("%Y-%m-%d")
+            new_dict["birth_date"] = date
 
-            serializer = TeamSerializer(team)
+            # Validar titular
+            if "titular" in data:
+                new_dict["titular"] = to_bool(data["titular"])
+                if new_dict["titular"] != player.titular:
+                    print("asdasd", player.titular)
+                    print("adasdds -<", data["titular"])
+                    count_player_titular = Player.own_manager.count_titular_by_team(
+                        new_dict["team_id"]
+                    )
+                    if count_player_titular >= 11 and data["titular"] == True:
+                        res[
+                            "respuesta"
+                        ] = "Ya tiene 11 jugadores titulares no puede colocar otro mas como titular"
+                        return Response(res, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                new_dict["titular"] = player.titular
+            # Validar shirt number
+            if "shirt_number" in data:
+                new_dict["shirt_number"] = data["shirt_number"]
+                if new_dict["shirt_number"] != player.shirt_number:
+                    count_player_shirt = Player.own_manager.count_shirt_by_team(
+                        new_dict["team_id"], new_dict["shirt_number"]
+                    )
+                    if count_player_shirt != 0:
+                        res[
+                            "respuesta"
+                        ] = "No puede registrar a otro jugador con la misma camiseta en ese equipo"
+                        return Response(res, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                new_dict["shirt_number"] = player.shirt_number
+            # Validate position
+            if "position" in data:
+                position = validate_position_exist(data["position"])
+                if not position:
+                    res[
+                        "respuesta"
+                    ] = f"No existe la posicion {data['position']} recuerde que solo estan estas {get_positions()}"
+                    return Response(res, status=status.HTTP_400_BAD_REQUEST)
+                new_dict["position"] = position
+            else:
+                new_dict["position"] = player.position
+            player.name = data.get("name", player.name)
+            player.last_name = data.get("last_name", player.last_name)
+            player.birth_date = new_dict["birth_date"]
+            player.team_id = new_dict["team_id"]
+            player.birth_date = new_dict["birth_date"]
+            player.team_id = new_dict["team_id"]
+            player.titular = new_dict["titular"]
+            player.shirt_number = new_dict["shirt_number"]
+            player.position = new_dict["position"]
+            player.save()
+
+            serializer = PlayerSerializer(player)
             return Response(serializer.data)
 
         return Response(

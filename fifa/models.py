@@ -3,6 +3,7 @@ from datetime import datetime
 
 # Create your models here.
 from . import managers
+from django.db.models import UniqueConstraint
 
 
 class Country(models.Model):
@@ -64,6 +65,11 @@ class Player(models.Model):
     class Meta:
         verbose_name = "Player"
         verbose_name_plural = "Players"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["team", "shirt_number"], name="Camisa por equipo"
+            )
+        ]
 
     @classmethod
     def get_by_id(cls, uid):

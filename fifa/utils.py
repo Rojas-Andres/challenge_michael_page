@@ -2,7 +2,7 @@ from .models import Country, Team, Player
 from datetime import datetime
 
 
-def validate_country(country):
+def validate_country(country: str):
     get_country = Country.own_manager.filter_country_by_name(country.upper())
     if get_country:
         return get_country
@@ -10,7 +10,7 @@ def validate_country(country):
         return None
 
 
-def validate_team(team):
+def validate_team(team: str):
     get_team = Team.own_manager.filter_team_by_name(team.upper())
     if get_team:
         return get_team
@@ -35,7 +35,7 @@ def to_bool(value) -> bool:
         raise Exception("Value was not recognized as a valid Boolean.")
 
 
-def validate_team_by_id(team_id):
+def validate_team_by_id(team_id: int):
     get_team = Team.own_manager.get_team_by_id(team_id)
     if get_team:
         return get_team
@@ -43,13 +43,30 @@ def validate_team_by_id(team_id):
         return None
 
 
-def validate_player(data: dict):
+def validate_player_update(data):
+    dict_data = {}
+    if "birth_date" in data:
+        data["birth_date"] = data.birth_date
+    else:
+        pass
+
+
+def convert_date(date):
+    try:
+        birth_date_cast = datetime.strptime(date, "%Y-%m-%d")
+    except ValueError:
+        return None
+    return birth_date_cast
+
+
+def validate_player_create(data: dict):
     res = {}
     try:
         birth_date_cast = datetime.strptime(data["birth_date"], "%Y-%m-%d")
     except ValueError:
         res["respuesta"] = "Recuerde el formato fecha YYYY-MM-DD (AÑO-MES-DIA)"
         return res
+
     # Validar que el equipo existe
     team = Team.own_manager.get_team_by_id(data["team_id"]).first()
     if team:
@@ -72,7 +89,7 @@ def validate_player(data: dict):
         count_player_shirt = Player.own_manager.count_shirt_by_team(
             data["team_id"], data["shirt_number"]
         )
-        print("esta es la cantidad de camisetas -> ", count_player_shirt)
+
         # Validar que no se repita la misma camisa por equipo
         if count_player_shirt != 0:
             res[
@@ -101,7 +118,7 @@ def get_positions():
     return [i[1] for i in Player.POSITION_OPTIONS]
 
 
-def validate_position_exist(position):
+def validate_position_exist(position: str):
     """
     Esta funcion valida si la posicion enviada existe
     """
