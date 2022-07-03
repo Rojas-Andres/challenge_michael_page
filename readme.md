@@ -84,6 +84,8 @@ python manage.py test
 
         Se valida que la posicion exista (posiciones [Arquero,Defensa,Centrocampista,Delantero])
 
+        Se valida que un equipo no pueda registrar mas de 23 jugadores 
+        
 	Actualizacion del jugador metodo (PATCH permite actualizar solo los campos que se le envian):
 
 		Se valida el formato de fecha (YYYY-MM-DD).

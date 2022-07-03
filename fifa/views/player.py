@@ -68,13 +68,23 @@ class PlayerViewSet(viewsets.ModelViewSet):
                 and data["shirt_number"]
                 and data["position"]
             ):
+
                 player = validate_player_create(data)
                 if "respuesta" in player:
                     return Response(player, status=status.HTTP_400_BAD_REQUEST)
-                new_player = Player.own_manager.create_player(data)
-                new_player.save()
-                return Response({"respuesta": "Jugador creado correctamente!"})
-
+                count_player = Player.own_manager.count_players_by_team(
+                    player["team_id"]
+                )
+                if count_player < 23:
+                    new_player = Player.own_manager.create_player(data)
+                    new_player.save()
+                    return Response({"respuesta": "Jugador creado correctamente!"})
+                else:
+                    return Response(
+                        {
+                            "respuesta": "Este equipo no puede registrar mas de 23 jugadores , reglamento de fifa"
+                        }
+                    )
         except KeyError as e:
             res[str(e)] = "Este campo es requerido"
 

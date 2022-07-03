@@ -57,7 +57,6 @@ class TeamViewSet(viewsets.ModelViewSet):
             ):
                 # Validar que no se puede crear mas de 32 equipos
                 count_teams = Team.own_manager.count_teams()
-                print("estos son los equipos -> ", count_teams)
                 if count_teams < 32:
                     country = validate_country(data["country"])
                     if country:
