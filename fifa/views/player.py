@@ -31,25 +31,24 @@ class PlayerViewSet(viewsets.ModelViewSet):
     def list(self, request):
         id_player = request.GET.get("id")
         if id_player:
-            pass
-            # get_country = Country.own_manager.filter_country_by_name(country.upper())
-            # if get_country:
-            #     # Obtener el equipo referente a ese pais
-            #     team = Team.own_manager.filter_team_by_country(
-            #         get_country.get().id
-            #     ).get()
-            #     serializer_context = {
-            #         "request": request,
-            #     }
-            #     serializer = TeamSerializer(
-            #         team, many=False, context=serializer_context
-            #     )
-            #     if serializer:
-            #         return Response(serializer.data, status=status.HTTP_200_OK)
-            # else:
-            #     return Response(
-            #         {"response": f"No existe el pais {country} en la base de datos"}
-            #     )
+            print("adasddsads")
+            get_player = Player.own_manager.get_player_by_id(id_player)
+            if get_player:
+
+                serializer_context = {
+                    "request": request,
+                }
+                serializer = PlayerSerializer(
+                    get_player.get(), many=False, context=serializer_context
+                )
+                if serializer:
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(
+                    {
+                        "response": f"No existe el jugador {id_player} en la base de datos"
+                    }
+                )
         else:
             all_players = Player.own_manager.all_player()
             if not all_players:

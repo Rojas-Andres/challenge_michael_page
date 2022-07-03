@@ -53,6 +53,7 @@ python manage.py test
 # Validaciones 
 
 ## Team
+
 	Creacion del equipo(Metodo POST):
 		Se valida que solo exista un equipo por pais.
 
@@ -61,7 +62,7 @@ python manage.py test
 		Se valida que el pais exista en la base de datos.
 
 	Actualizacion equipo(Metodo PATCH):
-    
+
 		Se valida que el pais exista para la actualizacion del equipo
 
 		Se valida que al actualizar el equipo solo exista un pais por equipo.
