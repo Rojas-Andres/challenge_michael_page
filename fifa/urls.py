@@ -30,6 +30,11 @@ urlpatterns = [
         name="PromedioEquipoJugadorSuplente",
     ),
     path(
+        "get_max_team_player",
+        fifa_endpoints.get_max_team_player,
+        name="ObtenerMaximoJugadoresEquipo",
+    ),
+    path(
         "get_avg_age_players",
         fifa_endpoints.get_avg_players,
         name="PromedioEdadJugadores",

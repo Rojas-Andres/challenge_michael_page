@@ -78,6 +78,9 @@ class PlayerManager(models.Manager):
             .annotate(dcount=Count("team_id"))
         )
 
+    def get_agg_team_player(self):
+        return self.all().values("team__name_team").annotate(dcount=Count("team_id"))
+
     def get_birth_date_all(self):
         return self.all().values("birth_date")
 

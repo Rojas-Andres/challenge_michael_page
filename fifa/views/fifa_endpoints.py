@@ -6,6 +6,7 @@ from fifa.models import Country, Team, Player
 from fifa.serializers import CountrySerializer, PlayerSerializer
 from fifa.functions import Queries
 from django.db import connection, transaction, IntegrityError
+from django.db.models import Max
 
 
 @api_view(["GET"])
@@ -107,9 +108,26 @@ def get_max_player_team(request):
 
 
 # falta
+@api_view(["GET"])
+def get_max_team_player(request):
+    """
+    Esta api se encarga de devolver el equipo que tiene mas jugadores registrados
+    """
+    res = {"nombre_equipo": "", "maximo": -1}
+    players_team = Player.own_manager.get_agg_team_player()
+    if players_team:
+        for i in players_team:
+            if i["dcount"] > res["maximo"]:
+                res["maximo"] = i["dcount"]
+                res["nombre_equipo"] = i["team__name_team"]
+        return Response(res, status=status.HTTP_200_OK)
+    else:
+        return Response(
+            {"respuesta": "No hay jugadores registrados en la base de datos!"},
+            status=status.HTTP_200_OK,
+        )
 
 
-#
 @api_view(["GET"])
 def get_avg_players(request):
     """
