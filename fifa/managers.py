@@ -49,6 +49,9 @@ class PlayerManager(models.Manager):
     def count_titular_by_team(self, team_id):
         return self.filter(team_id=team_id, titular=True).count()
 
+    def count_players(self):
+        return self.all().count()
+
     def get_shirt_number_by_team(self, team_id, shirt_number):
         return self.filter(team_id=team_id, shirt_number=shirt_number).get()
 
