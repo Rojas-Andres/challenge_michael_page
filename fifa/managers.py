@@ -64,8 +64,28 @@ class CoachingStaffManager(models.Manager):
             team_id=team_id,
         )
 
-    def get_coaching_by_id(self, id_team):
-        return self.filter(id=id_team)
+    def get_coaching_by_id(self, id_coaching):
+        return self.filter(id=id_coaching)
+
+    def get_all_coaching(self):
+        return self.all().values(
+            "name",
+            "last_name",
+            "birth_date",
+            "nacionality__name_country",
+            "rol",
+            "team__name_team",
+        )
+
+    def get_coaching_values(self, id_coaching):
+        return self.filter(id=id_coaching).values(
+            "name",
+            "last_name",
+            "birth_date",
+            "nacionality__name_country",
+            "rol",
+            "team__name_team",
+        )
 
 
 class TeamManager(models.Manager):

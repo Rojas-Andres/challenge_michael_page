@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets, status, generics
 
 from rest_framework.decorators import api_view
-from fifa.serializers import PlayerSerializer
+from fifa.serializers import CoachingStaffSerializer
 from fifa.models import Team, Country, CoachingStaff
 from rest_framework.decorators import action
 from fifa.utils import (
@@ -27,36 +27,36 @@ from django.http import HttpResponse
 
 
 class CoachingStaffViewSet(viewsets.ModelViewSet):
-    serializer_class = PlayerSerializer
-    queryset = Player.own_manager.all_player()
+    serializer_class = CoachingStaffSerializer
+    queryset = CoachingStaff.own_manager.get_all_coaching()
 
     def list(self, request):
-        id_player = request.GET.get("id")
-        if id_player:
-            pass
-            # get_country = Country.own_manager.filter_country_by_name(country.upper())
-            # if get_country:
-            #     # Obtener el equipo referente a ese pais
-            #     team = Team.own_manager.filter_team_by_country(
-            #         get_country.get().id
-            #     ).get()
-            #     serializer_context = {
-            #         "request": request,
-            #     }
-            #     serializer = TeamSerializer(
-            #         team, many=False, context=serializer_context
-            #     )
-            #     if serializer:
-            #         return Response(serializer.data, status=status.HTTP_200_OK)
-            # else:
-            #     return Response(
-            #         {"response": f"No existe el pais {country} en la base de datos"}
-            #     )
+        id_coaching = request.GET.get("id")
+        if id_coaching:
+            get_coaching = CoachingStaff.own_manager.get_coaching_by_id(id_coaching)
+            if get_coaching:
+                serializer_context = {
+                    "request": request,
+                }
+                serializer = CoachingStaffSerializer(
+                    get_coaching.get(), many=False, context=serializer_context
+                )
+                if serializer:
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(
+                    {
+                        "response": f"No existe el coaching {id_coaching} en la base de datos"
+                    }
+                )
+
         else:
-            all_players = Player.own_manager.all_player()
-            if not all_players:
-                return Response({"respuesta": "No hay jugadores en la base de datos!"})
-            return Response(all_players)
+            all_coaching = CoachingStaff.own_manager.get_all_coaching()
+            if not all_coaching:
+                return Response(
+                    {"respuesta": "No hay cuerpo tecnico en la base de datos!"}
+                )
+            return Response(all_coaching)
 
     def create(self, request, *args, **kwargs):
         data = request.data
@@ -121,10 +121,10 @@ class CoachingStaffViewSet(viewsets.ModelViewSet):
         )
 
     def destroy(self, request, *args, **kwargs):
-        player = Player.own_manager.get_player_by_id(kwargs["pk"]).first()
-        if player:
-            player.delete()
-            return Response({"respuesta": "Jugador eliminado correctamente"})
+        coaching = CoachingStaff.own_manager.get_coaching_by_id(kwargs["pk"]).first()
+        if coaching:
+            coaching.delete()
+            return Response({"respuesta": "Cuerpo tecnico eliminado correctamente"})
         return Response(
-            {"respuesta": f"No se encuentra el jugador con el id {kwargs['pk']}"}
+            {"respuesta": f"No se encuentra el cuerpo tecnico con el id {kwargs['pk']}"}
         )
