@@ -49,6 +49,9 @@ class PlayerManager(models.Manager):
     def count_titular_by_team(self, team_id):
         return self.filter(team_id=team_id, titular=True).count()
 
+    def count_all_alternate_player(self):
+        return self.filter(titular=False).count()
+
     def count_players(self):
         return self.all().count()
 
@@ -63,6 +66,9 @@ class PlayerManager(models.Manager):
 
     def get_young_player(self):
         return self.all().order_by("-birth_date")
+
+    def get_old_player(self):
+        return self.all().order_by("birth_date")
 
 
 class CoachingStaffManager(models.Manager):

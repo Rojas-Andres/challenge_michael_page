@@ -18,6 +18,17 @@ urlpatterns = [
     path("count_teams", fifa_endpoints.get_count_teams, name="CantidadEquipos"),
     path("count_players", fifa_endpoints.get_count_players, name="CantidadEquipos"),
     path("get_young_player", fifa_endpoints.get_young_player, name="JugadorMasJoven"),
+    path("get_old_player", fifa_endpoints.get_old_player, name="JugadorMasViejo"),
+    path(
+        "count_alternate_player",
+        fifa_endpoints.get_count_alternate_player,
+        name="CantidadJugadoresSuplentes",
+    ),
+    path(
+        "get_avg_player_team",
+        fifa_endpoints.get_avg_alternate_player_by_team,
+        name="PromedioEquipoJugadorSuplente",
+    ),
 ]
 # urlpatterns = [
 #     path("", include(router.urls)),
