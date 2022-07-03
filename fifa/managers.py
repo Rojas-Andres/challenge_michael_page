@@ -61,6 +61,9 @@ class PlayerManager(models.Manager):
     def count_shirt_by_team(self, team_id, shirt_number):
         return self.filter(team_id=team_id, shirt_number=shirt_number).count()
 
+    def get_young_player(self):
+        return self.all().order_by("-birth_date")
+
 
 class CoachingStaffManager(models.Manager):
     def create_coach(self, data, id_nacionality, rol, team_id):

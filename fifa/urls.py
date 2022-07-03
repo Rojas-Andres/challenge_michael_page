@@ -17,6 +17,7 @@ urlpatterns = [
     path("get_all_country", country.get_all_country, name="ObtenerTodosPaises"),
     path("count_teams", fifa_endpoints.get_count_teams, name="CantidadEquipos"),
     path("count_players", fifa_endpoints.get_count_players, name="CantidadEquipos"),
+    path("get_young_player", fifa_endpoints.get_young_player, name="JugadorMasJoven"),
 ]
 # urlpatterns = [
 #     path("", include(router.urls)),
