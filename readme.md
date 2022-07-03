@@ -25,6 +25,7 @@ cd rebus
 
 
 pip3 install -r requeriments.txt
+
 pip install -r requeriments.txt
 
 
@@ -32,16 +33,19 @@ pip install -r requeriments.txt
 
 
 python manage.py makemigrations
+
 python manage.py migrate
 
 
 ## Correr server
 
 python3 manage.py runserver
+
 python manage.py runserver
 
 
 ### Test
 
 python3 manage.py test
+
 python manage.py test
