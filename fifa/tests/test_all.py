@@ -1,11 +1,12 @@
 from rest_framework.test import APIClient
-import pytest
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from django.test import TestCase
 from fifa.models import Country, Team, Player
 import mock
 from django.core.files import File
+import json
+import os
 
 client = APIClient()
 image_mock = mock.MagicMock(spec=File)
@@ -16,6 +17,8 @@ class TestAll(TestCase):
     """Test module for GET all puppies API"""
 
     def setUp(self):
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+
         Country.own_manager.create_country("COLOMBIA")
         data = {
             "name_team": "Colombia",
@@ -24,6 +27,7 @@ class TestAll(TestCase):
             "country": "COLOMBIA",
         }
         Team.own_manager.create_team(data, 1)
+
         number_shirt = 1
         titular = True
         data = {
@@ -43,6 +47,25 @@ class TestAll(TestCase):
             Player.own_manager.create_player(data)
             number_shirt += 1
 
+        # Crear pais and equipo
+        with open(f"{dir_path}/files/country.json") as json_data_file:
+            data = json.load(json_data_file)
+            indice = 2
+            for i in data:
+                Country.own_manager.create_country(i.upper())
+                country = Country.own_manager.filter_country_by_name(i.upper()).get().id
+                dic = {
+                    "name_team": i.capitalize(),
+                    "flag_photo": image_mock,
+                    "shield_photo": image_mock,
+                    "country": i.upper(),
+                }
+                Team.own_manager.create_team(dic, country)
+
+    def test_get_all_country(self):
+        response = client.get("/api/get_all_country")
+        assert len(response.json()) == 32
+
     def test_create_country(self):
         response = client.post(reverse("CrearPais"), data={"country": "COLOMBIA"})
         assert (
@@ -60,7 +83,7 @@ class TestAll(TestCase):
         response = client.post("/api/team/", data=data)
         assert (
             response.json()["respuesta"]
-            == "Ya se encuentra un equipo creado con ese pais"
+            == "No puede crear mas equipos, la fifa solo permite 32"
         )
 
     def test_change_update_shirt_player(self):

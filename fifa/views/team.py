@@ -55,41 +55,50 @@ class TeamViewSet(viewsets.ModelViewSet):
                 and data["shield_photo"]
                 and data["country"]
             ):
-                country = validate_country(data["country"])
-                if country:
-                    id_country = country.get().id
-                    team_db = validate_team(data["name_team"])
-                    if not team_db:
-                        # Validar que ya no exista un equipo con ese pais
-                        team_c = Team.own_manager.filter_team_by_country_name(
-                            data["country"]
-                        )
-                        if not team_c:
-                            team = Team.own_manager.create_team(data, id_country)
-
-                            team.save()
-                            serializer_context = {
-                                "request": request,
-                            }
-                            serializer = TeamSerializer(
-                                team, many=False, context=serializer_context
+                # Validar que no se puede crear mas de 32 equipos
+                count_teams = Team.own_manager.count_teams()
+                print("estos son los equipos -> ", count_teams)
+                if count_teams < 32:
+                    country = validate_country(data["country"])
+                    if country:
+                        id_country = country.get().id
+                        team_db = validate_team(data["name_team"])
+                        if not team_db:
+                            # Validar que ya no exista un equipo con ese pais
+                            team_c = Team.own_manager.filter_team_by_country_name(
+                                data["country"]
                             )
-                            if serializer:
-                                return Response(
-                                    serializer.data, status=status.HTTP_201_CREATED
+                            if not team_c:
+                                team = Team.own_manager.create_team(data, id_country)
+
+                                team.save()
+                                serializer_context = {
+                                    "request": request,
+                                }
+                                serializer = TeamSerializer(
+                                    team, many=False, context=serializer_context
                                 )
+                                if serializer:
+                                    return Response(
+                                        serializer.data, status=status.HTTP_201_CREATED
+                                    )
+                            else:
+                                res[
+                                    "respuesta"
+                                ] = "Ya se encuentra un equipo creado con ese pais"
                         else:
                             res[
                                 "respuesta"
-                            ] = "Ya se encuentra un equipo creado con ese pais"
+                            ] = f"El equipo {data['name_team']} ya se encuentra creado en la base de datos"
                     else:
                         res[
-                            "respuesta"
-                        ] = f"El equipo {data['name_team']} ya se encuentra creado en la base de datos"
+                            "response"
+                        ] = f"El pais {data['country']} no se encuentra en la base de datos"
                 else:
                     res[
-                        "response"
-                    ] = f"El pais {data['country']} no se encuentra en la base de datos"
+                        "respuesta"
+                    ] = f"No puede crear mas equipos, la fifa solo permite 32"
+                    return Response(res, status=status.HTTP_400_BAD_REQUEST)
         except KeyError as e:
             res[str(e)] = "Este campo es requerido"
 

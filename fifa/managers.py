@@ -14,6 +14,9 @@ class CountryManager(models.Manager):
     def create_country(self, country):
         return self.create(name_country=country)
 
+    def get_all_country(self):
+        return self.all()
+
 
 class PlayerManager(models.Manager):
     def all_player(self):
@@ -97,6 +100,9 @@ class TeamManager(models.Manager):
 
     def filter_team_by_country_name(self, country_name):
         return self.filter(country__name_country=country_name)
+
+    def count_teams(self):
+        return self.all().count()
 
     def all_teams(self):
         return self.all().values(

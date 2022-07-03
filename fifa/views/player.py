@@ -31,7 +31,6 @@ class PlayerViewSet(viewsets.ModelViewSet):
     def list(self, request):
         id_player = request.GET.get("id")
         if id_player:
-            print("adasddsads")
             get_player = Player.own_manager.get_player_by_id(id_player)
             if get_player:
 

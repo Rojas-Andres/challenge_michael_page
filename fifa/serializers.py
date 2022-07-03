@@ -28,3 +28,9 @@ class CoachingStaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = CoachingStaff
         fields = ("name", "last_name", "birth_date", "nacionality_id", "rol", "team")
+
+
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = "__all__"
