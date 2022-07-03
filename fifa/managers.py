@@ -8,6 +8,9 @@ class CountryManager(models.Manager):
     def filter_country_by_name(self, country):
         return self.filter(name_country=country.upper())
 
+    def filter_country_by_id(self, country_id):
+        return self.filter(id=country_id)
+
     def create_country(self, country):
         return self.create(name_country=country)
 
@@ -50,6 +53,21 @@ class PlayerManager(models.Manager):
         return self.filter(team_id=team_id, shirt_number=shirt_number).count()
 
 
+class CoachingStaffManager(models.Manager):
+    def create_coach(self, data, id_nacionality, rol, team_id):
+        return self.create(
+            name=data["name"],
+            last_name=data["last_name"],
+            birth_date=data["birth_date"],
+            nacionality_id=id_nacionality,
+            rol=rol,
+            team_id=team_id,
+        )
+
+    def get_coaching_by_id(self, id_team):
+        return self.filter(id=id_team)
+
+
 class TeamManager(models.Manager):
     def filter_team_by_name(self, team):
         return self.filter(name_team=team)
@@ -79,6 +97,3 @@ class TeamManager(models.Manager):
 
     def get_team_by_id(self, id_team):
         return self.filter(id=id_team)
-
-    def detroy_team_by_id(self, id):
-        pass

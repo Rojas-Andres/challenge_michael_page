@@ -1,4 +1,4 @@
-from .models import Country, Team, Player
+from .models import Country, Team, Player, CoachingStaff
 from datetime import datetime
 
 
@@ -122,9 +122,26 @@ def validate_position_exist(position: str):
     """
     Esta funcion valida si la posicion enviada existe
     """
-    positions_str = [i[1] for i in Player.POSITION_OPTIONS]
     position = position.capitalize()
     result = list(filter(lambda x: x[1] == position, Player.POSITION_OPTIONS))
+    if not result:
+        return False
+    return result[0][0]
+
+
+def get_rol():
+    """
+    Esta funcion me entrega todos los posibles roles
+    """
+    return [i[1] for i in CoachingStaff.ROL_OPTIONS]
+
+
+def validate_rol_exist(rol: str):
+    """
+    Esta funcion valida si el rol existe
+    """
+    rol = rol.capitalize()
+    result = list(filter(lambda x: x[1] == rol, CoachingStaff.ROL_OPTIONS))
     if not result:
         return False
     return result[0][0]

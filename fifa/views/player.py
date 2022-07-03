@@ -31,24 +31,25 @@ class PlayerViewSet(viewsets.ModelViewSet):
     def list(self, request):
         id_player = request.GET.get("id")
         if id_player:
-            get_country = Country.own_manager.filter_country_by_name(country.upper())
-            if get_country:
-                # Obtener el equipo referente a ese pais
-                team = Team.own_manager.filter_team_by_country(
-                    get_country.get().id
-                ).get()
-                serializer_context = {
-                    "request": request,
-                }
-                serializer = TeamSerializer(
-                    team, many=False, context=serializer_context
-                )
-                if serializer:
-                    return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                return Response(
-                    {"response": f"No existe el pais {country} en la base de datos"}
-                )
+            pass
+            # get_country = Country.own_manager.filter_country_by_name(country.upper())
+            # if get_country:
+            #     # Obtener el equipo referente a ese pais
+            #     team = Team.own_manager.filter_team_by_country(
+            #         get_country.get().id
+            #     ).get()
+            #     serializer_context = {
+            #         "request": request,
+            #     }
+            #     serializer = TeamSerializer(
+            #         team, many=False, context=serializer_context
+            #     )
+            #     if serializer:
+            #         return Response(serializer.data, status=status.HTTP_200_OK)
+            # else:
+            #     return Response(
+            #         {"response": f"No existe el pais {country} en la base de datos"}
+            #     )
         else:
             all_players = Player.own_manager.all_player()
             if not all_players:
@@ -72,12 +73,6 @@ class PlayerViewSet(viewsets.ModelViewSet):
                 player = validate_player_create(data)
                 if "respuesta" in player:
                     return Response(player, status=status.HTTP_400_BAD_REQUEST)
-                    # return JsonResponse(
-                    #     json.dumps(player),
-                    #     content_type="application/json",
-                    #     safe=False,
-                    # )
-
                 new_player = Player.own_manager.create_player(data)
                 new_player.save()
                 return Response({"respuesta": "Jugador creado correctamente!"})
@@ -122,8 +117,6 @@ class PlayerViewSet(viewsets.ModelViewSet):
             if "titular" in data:
                 new_dict["titular"] = to_bool(data["titular"])
                 if new_dict["titular"] != player.titular:
-                    print("asdasd", player.titular)
-                    print("adasdds -<", data["titular"])
                     count_player_titular = Player.own_manager.count_titular_by_team(
                         new_dict["team_id"]
                     )
@@ -169,10 +162,8 @@ class PlayerViewSet(viewsets.ModelViewSet):
             player.shirt_number = new_dict["shirt_number"]
             player.position = new_dict["position"]
             player.save()
-
             serializer = PlayerSerializer(player)
             return Response(serializer.data)
-
         return Response(
             {"respuesta": f"No se encuentra el equipo con el id {kwargs['pk']}"}
         )

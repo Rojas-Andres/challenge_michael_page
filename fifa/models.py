@@ -99,6 +99,7 @@ class CoachingStaff(models.Model):
     nacionality = models.ForeignKey(Country, on_delete=models.CASCADE)
     rol = models.CharField("Rol", max_length=12, choices=ROL_OPTIONS)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    own_manager = managers.CoachingStaffManager()
 
     @classmethod
     def get_by_id(cls, uid):

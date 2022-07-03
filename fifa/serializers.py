@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import Team, Country, Player
+from .models import Team, Country, Player, CoachingStaff
 
 
 class TeamSerializer(serializers.ModelSerializer):
@@ -22,3 +22,9 @@ class PlayerSerializer(serializers.ModelSerializer):
             "shirt_number",
             "position",
         )
+
+
+class CoachingStaffSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CoachingStaff
+        fields = ("name", "last_name", "birth_date", "nacionality_id", "rol")

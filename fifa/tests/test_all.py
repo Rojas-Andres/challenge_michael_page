@@ -10,20 +10,8 @@ from django.core.files import File
 client = APIClient()
 image_mock = mock.MagicMock(spec=File)
 image_mock.name = "Flag_of_Colombia.svg_6RQAHOe.png"
-# @pytest.mark.django_db
-# def test_create_database(client):
-#     print("cliente", client)
-#     url = "api-create_country"
-#     url = reverse("api-create_country")
-#     response = client.post(url, data={"country": "venezuela"})
-#     print("response ->", response)
-#     assert True == True
 
 
-# @pytest.mark.skip
-# def test_player():
-#     print("entre mor\n\n\n\n\n\n\n")
-#     assert True == True
 class TestAll(TestCase):
     """Test module for GET all puppies API"""
 
@@ -77,8 +65,6 @@ class TestAll(TestCase):
 
     def test_change_update_shirt_player(self):
         data = {"shirt_number": 1}
-        headers = {"Content-Type": "application/json", "Accept-Encoding": None}
-
         response = client.patch("/api/player/9/", data=data)
         assert (
             response.json()["respuesta"]
@@ -99,6 +85,14 @@ class TestAll(TestCase):
         data = {"titular": True}
         response = client.patch("/api/player/13/", data=data)
         assert response.json()["respuesta"] == "No se encuentra el equipo con el id 13"
+
+    def test_create_player_required(self):
+        data = {
+            "player_photo": image_mock,
+            "name": "Andres",
+        }
+        response = client.post("/api/player/", data=data)
+        assert response.json()["'last_name'"] == "Este campo es requerido"
 
     def test_create_player(self):
         data = {
