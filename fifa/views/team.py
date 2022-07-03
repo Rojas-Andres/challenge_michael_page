@@ -97,6 +97,7 @@ class TeamViewSet(viewsets.ModelViewSet):
 
     def partial_update(self, request, *args, **kwargs):
         team = Team.own_manager.get_team_by_id(kwargs["pk"]).first()
+        res = {}
         if team:
             data = request.data
             # Filtramos pais para saber si existe
@@ -122,7 +123,18 @@ class TeamViewSet(viewsets.ModelViewSet):
                         )
                 else:
                     team.country_id = country.get().id
-            team.name_team = data.get("name_team", team.name_team)
+
+            # Validar que solo exista un nombre para el equipo
+            if "name_team" in data:
+                team_db = validate_team(data["name_team"])
+                if not team_db:
+                    team.name_team = data["name_team"]
+                else:
+                    res[
+                        "respuesta"
+                    ] = f"El equipo con el nombre {data['name_team']} ya se encuentra creado en la base de datos"
+                    return Response(res, status=status.HTTP_400_BAD_REQUEST)
+
             team.flag_photo = data.get("flag_photo", team.flag_photo)
             team.shield_photo = data.get("shield_photo", team.shield_photo)
 

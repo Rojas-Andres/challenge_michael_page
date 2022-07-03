@@ -109,7 +109,7 @@ class TeamManager(models.Manager):
 
     def create_team(self, data, id_country):
         return self.create(
-            name_team=data["name_team"],
+            name_team=data["name_team"].upper(),
             flag_photo=data["flag_photo"],
             shield_photo=data["shield_photo"],
             country_id=id_country,
