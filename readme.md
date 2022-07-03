@@ -70,6 +70,9 @@ python manage.py test
 		Se valida que al actualizar el equipo solo exista un pais por equipo.
 
 		Se valida que solo exista un nombre por equipo.
+
+        Se valida que un equipo no pueda registrar mas de 23 jugadores.
+
 ## Player
 	
 	Creacion del jugador(Metodo POST):
@@ -84,8 +87,8 @@ python manage.py test
 
         Se valida que la posicion exista (posiciones [Arquero,Defensa,Centrocampista,Delantero])
 
-        Se valida que un equipo no pueda registrar mas de 23 jugadores 
-        
+        Se valida que el jugador no pueda tener menos de 15 años.
+
 	Actualizacion del jugador metodo (PATCH permite actualizar solo los campos que se le envian):
 
 		Se valida el formato de fecha (YYYY-MM-DD).
@@ -98,6 +101,8 @@ python manage.py test
 
         Se valida que la posicion exista (posiciones [Arquero,Defensa,Centrocampista,Delantero])
 
+        Se valida que al actualizar el jugador no pueda tener menos de 15 años.
+        
 # Coaching
 
     Creacion del cuerpo tecnico(METODO POST):
