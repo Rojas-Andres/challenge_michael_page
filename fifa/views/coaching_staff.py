@@ -22,6 +22,7 @@ from fifa.utils import (
     validate_rol_exist,
     get_rol,
     validate_nacionality_exist,
+    calculate_age,
 )
 from fifa.models import Player
 from django.http import HttpResponse
@@ -93,6 +94,13 @@ class CoachingStaffViewSet(viewsets.ModelViewSet):
                     ] = "Recuerde el formato fecha YYYY-MM-DD (AÑO-MES-DIA)"
                     return Response(res, status=status.HTTP_400_BAD_REQUEST)
 
+                age = calculate_age(date)
+                if age < 15:
+                    res[
+                        "respuesta"
+                    ] = "El coach que desea inscribir no puede tener menos de 15 años"
+                    return Response(res, status=status.HTTP_400_BAD_REQUEST)
+
                 rol = validate_rol_exist(data["rol"])
                 if not rol:
                     res[
@@ -122,6 +130,14 @@ class CoachingStaffViewSet(viewsets.ModelViewSet):
                         "respuesta"
                     ] = "Recuerde el formato fecha YYYY-MM-DD (AÑO-MES-DIA)"
                     return Response(res, status=status.HTTP_400_BAD_REQUEST)
+                age = calculate_age(date)
+
+                if age < 15:
+                    res[
+                        "respuesta"
+                    ] = "El coach que desea inscribir no puede tener menos de 15 años"
+                    return Response(res, status=status.HTTP_400_BAD_REQUEST)
+
                 if date != coaching.birth_date:
                     coaching.birth_date = date
 
