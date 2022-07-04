@@ -63,10 +63,16 @@ class TestAll(TestCase):
                 Team.own_manager.create_team(dic, country)
 
     def test_get_all_country(self):
+        """
+        Test obtener todos los paises
+        """
         response = client.get("/api/get_all_country")
         assert len(response.json()) == 32
 
     def test_create_country(self):
+        """
+        Test creando pais , no puede crear un pais con el mismo nombre
+        """
         response = client.post(reverse("CrearPais"), data={"country": "COLOMBIA"})
         assert (
             response.json()["respuesta"]
@@ -74,6 +80,9 @@ class TestAll(TestCase):
         )
 
     def test_create_team(self):
+        """
+        Test 32 equipos creados no permite crear otro
+        """
         data = {
             "name_team": "Colombia",
             "flag_photo": image_mock,
@@ -87,6 +96,9 @@ class TestAll(TestCase):
         )
 
     def test_change_update_shirt_player(self):
+        """
+        Test la camiseta de un jugador no se puede repetir para un equipo
+        """
         data = {"shirt_number": 1}
         response = client.patch("/api/player/9/", data=data)
         assert (
@@ -110,6 +122,9 @@ class TestAll(TestCase):
         assert response.json()["respuesta"] == "No se encuentra el equipo con el id 13"
 
     def test_create_player_required(self):
+        """ "
+        Test el campo last_name es requerido
+        """
         data = {
             "player_photo": image_mock,
             "name": "Andres",
@@ -118,6 +133,9 @@ class TestAll(TestCase):
         assert response.json()["'last_name'"] == "Este campo es requerido"
 
     def test_create_player_age(self):
+        """
+        Test el jugador no puede tener menos de 15 años
+        """
         data = {
             "player_photo": image_mock,
             "name": "Andres",
@@ -129,13 +147,15 @@ class TestAll(TestCase):
             "position": "Delantero",
         }
         response = client.post("/api/player/", data=data)
-        print("este es el response del age ", response.json())
         assert (
             response.json()["respuesta"]
             == "El jugador que desea inscribir no puede tener menos de 15 años"
         )
 
     def test_create_player_titular(self):
+        """
+        Test no puede colocar mas de 11 jugadores como titulares
+        """
         data = {
             "player_photo": image_mock,
             "name": "Andres",
@@ -151,3 +171,85 @@ class TestAll(TestCase):
             response.json()["respuesta"]
             == "Ya tiene 11 jugadores titulares no puede colocar otro mas como titular"
         )
+
+    def test_create_player_not_found_team(self):
+        """
+        Test id del equipo no encontrado
+        """
+        data = {
+            "player_photo": image_mock,
+            "name": "Andres",
+            "last_name": "Rojas",
+            "birth_date": "2005-04-12",
+            "team_id": 1111,
+            "shirt_number": 13,
+            "titular": False,
+            "position": "Delantero",
+        }
+        response = client.post("/api/player/", data=data)
+        assert (
+            response.json()["respuesta"]
+            == "No existe el equipo con el id 1111 en la bd!"
+        )
+
+    def test_create_player_bad_birth_date(self):
+        """
+        Test envia fecha de nacimiento erronea
+        """
+        data = {
+            "player_photo": image_mock,
+            "name": "Andres",
+            "last_name": "Rojas",
+            "birth_date": "2000-04-112312",
+            "team_id": 1,
+            "shirt_number": 13,
+            "titular": False,
+            "position": "Delantero",
+        }
+        response = client.post("/api/player/", data=data)
+        assert (
+            response.json()["respuesta"]
+            == "Recuerde el formato fecha YYYY-MM-DD (AÑO-MES-DIA)"
+        )
+
+    def test_create_player_not_found_position(self):
+        """
+        Test no encuentra la posicion al crear el jugador
+        """
+        data = {
+            "player_photo": image_mock,
+            "name": "Andres",
+            "last_name": "Rojas",
+            "birth_date": "2000-04-12",
+            "team_id": 1,
+            "shirt_number": 13,
+            "titular": False,
+            "position": "CentrocampistaDelantero",
+        }
+        response = client.post("/api/player/", data=data)
+        assert (
+            response.json()["respuesta"]
+            == "No existe la posicion CentrocampistaDelantero recuerde que solo estan estas ['Arquero', 'Defensa', 'Centrocampista', 'Delantero']"
+        )
+
+    def test_delete_player(self):
+        """
+        Test eliminar jugador
+        """
+        response = client.delete("/api/player/1/")
+        assert response.json()["respuesta"] == "Jugador eliminado correctamente"
+
+    def test_get_all_player(self):
+        """
+        Test obtener todos los jugadores
+        """
+        response = client.get("/api/player/")
+        assert len(response.json()) == 11
+
+    def test_get_one_player(self):
+        """
+        Test obtener un jugador
+        """
+        params = {"id": 1}
+        response = client.get("/api/player/?id=1")
+        assert response.json()["titular"] == True

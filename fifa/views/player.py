@@ -172,8 +172,6 @@ class PlayerViewSet(viewsets.ModelViewSet):
             player.last_name = data.get("last_name", player.last_name)
             player.birth_date = new_dict["birth_date"]
             player.team_id = new_dict["team_id"]
-            player.birth_date = new_dict["birth_date"]
-            player.team_id = new_dict["team_id"]
             player.titular = new_dict["titular"]
             player.shirt_number = new_dict["shirt_number"]
             player.position = new_dict["position"]
