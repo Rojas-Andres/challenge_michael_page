@@ -139,3 +139,7 @@ Tener en cuenta que se ignora la base de datos local en el caso que corramos el 
         Se valida que la nacionalidad con la que se va actualizar exista en la base de datos.
 
         Se valida que la rol exista (roles [Tecnico,Asistente,Medico,Preparador]).
+
+## Recomendaciones
+
+    Cuando se esta guardando la imagen del escudo del equipo y la bandera del equipo , ese proceso deberia de guardar la imagen en un storage en la nube por ejemplo S3 y que cuando se le haga la peticion a la api de obtener equipo esta devuelva la url de donde se encuentra almacenada para que con solo ir a la url se realice la descarga automatica , el proceso actualmente esta guardando las imagenes en una carpeta llamada media , dentro de ella hay dos subcarpetas una es flag (para las banderas ) y otra es shield (para el escudo)
