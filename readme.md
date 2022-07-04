@@ -79,6 +79,8 @@ Tener en cuenta que se ignora la base de datos local en el caso que corramos el 
 
         Se valida que no se puedan crear mas de 32 equipos ya que solo son 32 equipos que van al mundial.
 
+        Se valida el archivo que se sube extensiones permitidas ["PNG", "png", "jpg", "JPG"]
+    
 	Actualizacion equipo(Metodo PATCH):
 
 		Se valida que el pais exista para la actualizacion del equipo
