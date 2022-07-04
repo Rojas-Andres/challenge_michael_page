@@ -117,7 +117,7 @@ class TestAll(TestCase):
         response = client.post("/api/player/", data=data)
         assert response.json()["'last_name'"] == "Este campo es requerido"
 
-    def test_create_player(self):
+    def test_create_player_age(self):
         data = {
             "player_photo": image_mock,
             "name": "Andres",
@@ -129,10 +129,25 @@ class TestAll(TestCase):
             "position": "Delantero",
         }
         response = client.post("/api/player/", data=data)
+        print("este es el response del age ", response.json())
+        assert (
+            response.json()["respuesta"]
+            == "El jugador que desea inscribir no puede tener menos de 15 años"
+        )
+
+    def test_create_player_titular(self):
+        data = {
+            "player_photo": image_mock,
+            "name": "Andres",
+            "last_name": "Rojas",
+            "birth_date": "2005-04-12",
+            "team_id": 1,
+            "shirt_number": 13,
+            "titular": True,
+            "position": "Delantero",
+        }
+        response = client.post("/api/player/", data=data)
         assert (
             response.json()["respuesta"]
             == "Ya tiene 11 jugadores titulares no puede colocar otro mas como titular"
         )
-        data["titular"] = False
-        response = client.post("/api/player/", data=data)
-        assert response.json()["respuesta"] == "Jugador creado correctamente!"
