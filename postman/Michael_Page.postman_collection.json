@@ -1,0 +1,886 @@
+{
+	"info": {
+		"_postman_id": "1c0314ee-dc7c-4fe9-ba16-2db955e019f5",
+		"name": "Michael_Page",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Team",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE TEAM",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name_team",
+									"value": "VENEZUELAS",
+									"type": "text"
+								},
+								{
+									"key": "flag_photo",
+									"type": "file",
+									"src": "/C:/Users/Andres/Downloads/Flag_of_Colombia.svg.png"
+								},
+								{
+									"key": "shield_photo",
+									"type": "file",
+									"src": "/C:/Users/Andres/Downloads/Flag_of_Colombia.svg.png"
+								},
+								{
+									"key": "country",
+									"value": "VENEZUELAS",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/team/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"team",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET TEAMS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/team/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"team",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET TEAM",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/team/?country=COLOMBIA",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"team",
+								""
+							],
+							"query": [
+								{
+									"key": "country",
+									"value": "COLOMBIA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE TEAM",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/team/3/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"team",
+								"3",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH TEAM",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name_team",
+									"value": "COLOMBIAs",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/team/1/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"team",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Country",
+			"item": [
+				{
+					"name": "CREATE COUNTRY",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "country",
+									"value": "VENEZUELA",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/create_country",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"create_country"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL COUNTRY",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/get_all_country",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"get_all_country"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Player",
+			"item": [
+				{
+					"name": "GET PLAYERS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/player/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"player",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE PLAYER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "player_photo",
+									"type": "file",
+									"src": "/C:/Users/Andres/Downloads/Flag_of_Colombia.svg.png"
+								},
+								{
+									"key": "name",
+									"value": "ANDRES",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "ASDASD",
+									"type": "text"
+								},
+								{
+									"key": "birth_date",
+									"value": "2003-04-11",
+									"type": "text"
+								},
+								{
+									"key": "team_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "titular",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "shirt_number",
+									"value": "22",
+									"type": "text"
+								},
+								{
+									"key": "position",
+									"value": "Defensa",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/player/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"player",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Player",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/player/6/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"player",
+								"6",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE PLAYER",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "name",
+								"value": "new_name",
+								"type": "text"
+							},
+							{
+								"key": "birth_date",
+								"value": "2021-12-9083",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/player/7/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"player",
+								"7",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET PLAYER",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/player/?id=1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"player",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Coaching Staff",
+			"item": [
+				{
+					"name": "Create Coaching",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "asdasd",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "dasdasd",
+									"type": "text"
+								},
+								{
+									"key": "birth_date",
+									"value": "1999-03-12",
+									"type": "text"
+								},
+								{
+									"key": "nacionality_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "rol",
+									"value": "Tecnico",
+									"type": "text"
+								},
+								{
+									"key": "team_id",
+									"value": "2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/coaching/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"coaching",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL COACHING",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/coaching/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"coaching",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET COACHING",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/coaching/?id=1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"coaching",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE COACHING",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/coaching/1/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"coaching",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH COACHING",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nacionality_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "new_name",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "new_last_name",
+									"type": "text"
+								},
+								{
+									"key": "birth_date",
+									"value": "2020-03-11",
+									"type": "text"
+								},
+								{
+									"key": "rol",
+									"value": "Asistente",
+									"type": "text"
+								},
+								{
+									"key": "team_id",
+									"value": "3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/coaching/2/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"coaching",
+								"2",
+								""
+							],
+							"query": [
+								{
+									"key": "nacionality_id",
+									"value": "12",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "EndPointsFifa",
+			"item": [
+				{
+					"name": "CountTeams",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/count_teams",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"count_teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CountPlayers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/count_players",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"count_players"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "YoungPlayer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/get_young_player",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"get_young_player"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OldPlayer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/get_old_player",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"get_old_player"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CountAlternatePlayer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/count_alternate_player",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"count_alternate_player"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AvgPlayerTeam",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/get_avg_player_team",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"get_avg_player_team"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AVG_DATE_PLAYERS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/get_avg_age_players",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"get_avg_age_players"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetMaxPlayerTeam",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/get_max_team_player",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"get_max_team_player"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GETOLDTEC",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/get_old_coaching",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"get_old_coaching"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AVGPLAYERSTEAM",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/get_avg_players_by_team",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"get_avg_players_by_team"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
