@@ -70,11 +70,6 @@ class TeamViewSet(viewsets.ModelViewSet):
                             if not team_c:
 
                                 # Validar extension archivo
-                                print(
-                                    data["shield_photo"],
-                                    type(data["shield_photo"]),
-                                    dir(data["shield_photo"]),
-                                )
                                 shield_photo = validate_file(str(data["shield_photo"]))
                                 if not shield_photo:
                                     res[
