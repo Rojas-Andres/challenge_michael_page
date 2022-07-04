@@ -58,6 +58,14 @@ docker run --name michael_page_app -p 8000:8000 -d michael_page
 
 Tener en cuenta que se ignora la base de datos local en el caso que corramos el server sin docker, ya que eso se definio en el .dockerignore
 
+
+## Diagramas
+
+![](diagrama/ER_FIFA_PLAYER_FIFA_TEAM.PNG)
+
+![](diagrama/ER.PNG)
+
+
 # Validaciones 
 
 ## Team
