@@ -36,7 +36,7 @@ python manage.py makemigrations
 
 python manage.py migrate
 
-
+## Correr proyecto sin docker
 ## Correr server
 
 python3 manage.py runserver
@@ -49,6 +49,14 @@ python manage.py runserver
 python3 manage.py test
 
 python manage.py test
+
+
+## Correr proyecto con docker
+docker build -t michael_page .
+
+docker run --name michael_page_app -p 8000:8000 -d michael_page
+
+Tener en cuenta que se ignora la base de datos local en el caso que corramos el server sin docker, ya que eso se definio en el .dockerignore
 
 # Validaciones 
 
