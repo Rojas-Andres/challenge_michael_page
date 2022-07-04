@@ -117,6 +117,14 @@ def validate_player_create(data: dict):
         return res
 
 
+def validate_file(file: str):
+    file_permission = ["PNG", "png", "jpg", "JPG"]
+    fi = file.split(".")
+    if fi[-1] in file_permission:
+        return True
+    return None
+
+
 def get_positions():
     """
     Esta funcion me entrega todas las posiciones posibles

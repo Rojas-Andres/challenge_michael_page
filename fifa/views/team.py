@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view
 from fifa.serializers import TeamSerializer
 from fifa.models import Team
 from rest_framework.decorators import action
-from fifa.utils import validate_country, validate_team
+from fifa.utils import validate_country, validate_team, validate_file
 from fifa.models import Country
 
 
@@ -68,6 +68,28 @@ class TeamViewSet(viewsets.ModelViewSet):
                                 data["country"]
                             )
                             if not team_c:
+
+                                # Validar extension archivo
+                                print(
+                                    data["shield_photo"],
+                                    type(data["shield_photo"]),
+                                    dir(data["shield_photo"]),
+                                )
+                                shield_photo = validate_file(str(data["shield_photo"]))
+                                if not shield_photo:
+                                    res[
+                                        "respuesta"
+                                    ] = "El archivo que intenta subir no esta permitido"
+                                    return Response(
+                                        res, status=status.HTTP_400_BAD_REQUEST
+                                    )
+                                if not shield_photo:
+                                    res[
+                                        "respuesta"
+                                    ] = "El archivo que intenta subir no esta permitido"
+                                    return Response(
+                                        res, status=status.HTTP_400_BAD_REQUEST
+                                    )
                                 team = Team.own_manager.create_team(data, id_country)
 
                                 team.save()
