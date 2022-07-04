@@ -19,6 +19,7 @@ from fifa.utils import (
     validate_position_exist,
     convert_date,
     get_positions,
+    calculate_age,
 )
 from fifa.models import Player
 from django.http import HttpResponse
@@ -105,7 +106,7 @@ class PlayerViewSet(viewsets.ModelViewSet):
                     res[
                         "respuesta"
                     ] = f"No existe el equipo con el id {data['team_id']} en la bd!"
-                    return res
+                    return Response(res, status=status.HTTP_400_BAD_REQUEST)
             else:
                 new_dict["team_id"] = player.team_id
 

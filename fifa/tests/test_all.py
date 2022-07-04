@@ -95,7 +95,7 @@ class TestAll(TestCase):
             == "No puede crear mas equipos, la fifa solo permite 32"
         )
 
-    def test_change_update_shirt_player(self):
+    def test_change_patch_shirt_player(self):
         """
         Test la camiseta de un jugador no se puede repetir para un equipo
         """
@@ -113,7 +113,7 @@ class TestAll(TestCase):
         response = client.get("/api/player/")
         assert len(response.json()) == 11
 
-    def test_not_found_player(self):
+    def test_patch_not_found_player(self):
         """
         no encuentra jugador
         """
@@ -250,6 +250,65 @@ class TestAll(TestCase):
         """
         Test obtener un jugador
         """
-        params = {"id": 1}
         response = client.get("/api/player/?id=1")
         assert response.json()["titular"] == True
+
+    def test_patch_player_bad_birth_date(self):
+        """
+        Test actualizar un jugador con fecha de nacimiento erronea
+        """
+
+        data = {"birth_date": "2000-04-121"}
+        response = client.patch("/api/player/9/", data=data)
+        assert (
+            response.json()["respuesta"]
+            == "Recuerde el formato fecha YYYY-MM-DD (AÑO-MES-DIA)"
+        )
+
+    def test_patch_player_not_found_team(self):
+        """
+        Test actualizar un jugador con el team_id que no existe
+        """
+        data = {"team_id": 12312312}
+        response = client.patch("/api/player/9/", data=data)
+        assert (
+            response.json()["respuesta"]
+            == "No existe el equipo con el id 12312312 en la bd!"
+        )
+
+    def test_patch_player_not_permission_age(self):
+        """
+        Test actualizar un jugador con la edad menor a 15 años
+        """
+        data = {"birth_date": "2015-04-12"}
+        response = client.patch("/api/player/9/", data=data)
+        assert (
+            response.json()["respuesta"]
+            == "El jugador que desea inscribir no puede tener menos de 15 años"
+        )
+
+    def test_patch_player_position_not_found(self):
+        """
+        Test actualizar un jugador con la edad menor a 15 años
+        """
+        data = {"position": "holas"}
+        response = client.patch("/api/player/9/", data=data)
+        assert (
+            response.json()["respuesta"]
+            == "No existe la posicion holas recuerde que solo estan estas ['Arquero', 'Defensa', 'Centrocampista', 'Delantero']"
+        )
+
+    def test_create_coach(self):
+        """
+        Tesct crear coach
+        """
+        data = {
+            "name": "Andres",
+            "last_name": "Rojas",
+            "birth_date": "1999-03-12",
+            "nacionality_id": 1,
+            "rol": "Tecnico",
+            "team_id": 1,
+        }
+        response = client.post("/api/coaching/", data=data)
+        assert response.json()["respuesta"] == "Cuerpo tecnico creado correctamente!"
