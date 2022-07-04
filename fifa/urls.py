@@ -38,6 +38,11 @@ urlpatterns = [
         name="PromedioEdadJugadores",
     ),
     path(
+        "get_avg_players_by_team",
+        fifa_endpoints.get_avg_players_by_team,
+        name="PromedioJugadoresEquipo",
+    ),
+    path(
         "get_old_coaching",
         fifa_endpoints.get_old_coaching,
         name="TecnicoMasViejo",

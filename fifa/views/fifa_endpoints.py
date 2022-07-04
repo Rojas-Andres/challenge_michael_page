@@ -87,31 +87,37 @@ def get_avg_alternate_player_by_team(request):
     """
     Esta api se encarga de devolver el promedio de jugadores suplentes por equipo
     """
-    # query = Queries.get_avg_alternate_player()
-    # cursor = connection.cursor()
-    # cursor.execute(query)
-    # data = cursor.fetchall()
-    # data = [{"equipo": i[0], "promedio": i[1]} for i in data]
     pl = Player.own_manager.get_avg_alternate_player_by_team()
-    dic = {}
+    data = {}
     for i in pl:
-        if i.team__name_team in dic:
-            pass
+        if i["team__name_team"] not in data:
+            data[i["team__name_team"]] = {"titular": 0, "suplente": 0}
+        if i["titular"] == True:
+            data[i["team__name_team"]]["titular"] = i["dcount"]
         else:
-            dic[i.team__name_team] = {}
-    return Response("ok", status=status.HTTP_200_OK)
+            data[i["team__name_team"]]["suplente"] = i["dcount"]
+    prom = {}
+    for key, value in data.items():
+        if value["suplente"] == 0:
+            prom[key] = 0
+            continue
+        prom[key] = value["suplente"] / (value["suplente"] + value["titular"])
+    return Response(prom, status=status.HTTP_200_OK)
 
 
 @api_view(["GET"])
-def get_max_player_team(request):
+def get_avg_players_by_team(request):
     """
-    Esta api se encarga de devolver el equipo que mas registro jugadores
+    Esta api se encarga de devolver el promedio de numero de jugadores en cada equipo
     """
-    alternate_players = Player.own_manager.count_all_alternate_player()
-    return Response({"respuesta": alternate_players}, status=status.HTTP_200_OK)
+    query = Queries.get_avg_players_by_team()
+    cursor = connection.cursor()
+    cursor.execute(query)
+    datos = cursor.fetchall()
+    datos = [{"equipo": i[0], "promedio": i[1]} for i in datos]
+    return Response(datos, status=status.HTTP_200_OK)
 
 
-# falta
 @api_view(["GET"])
 def get_max_team_player(request):
     """

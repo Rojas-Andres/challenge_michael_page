@@ -145,3 +145,16 @@ Tener en cuenta que se ignora la base de datos local en el caso que corramos el 
 ## Recomendaciones
 
     Cuando se esta guardando la imagen del escudo del equipo y la bandera del equipo , ese proceso deberia de guardar la imagen en un storage en la nube por ejemplo S3 y que cuando se le haga la peticion a la api de obtener equipo esta devuelva la url de donde se encuentra almacenada para que con solo ir a la url se realice la descarga automatica , el proceso actualmente esta guardando las imagenes en una carpeta llamada media , dentro de ella hay dos subcarpetas una es flag (para las banderas ) y otra es shield (para el escudo)
+
+## Dudas
+
+    ¿Promedio de número jugadores suplentes en cada equipo?
+        
+        - Para la solucion de esta pregunta lo que hice fue agrupar por equipo y luego sacar los suplentes de cada equipo y dividirlos entre el total de jugadores de cada equipo. Tengo mis dudas referente a esa solucion.
+
+    ¿Cuál es el promedio de número de jugadores en cada equipo?
+
+    Para sacar el porcentaje de jugadores por equipo respecto a mis jugadores totales se hizo lo siguiente
+        1- contar y agrupar los jugadores de cada equipo 
+        2- contar todos los jugadores de todos los equipos en un subquery
+        3 - dividir los jugadores de cada equipo sobre los jugadores totales, esto me arroja el valor porcentual en jugadores que tiene cada equipo
