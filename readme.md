@@ -65,6 +65,7 @@ Tener en cuenta que se ignora la base de datos local en el caso que corramos el 
 
 ![](diagrama/ER.PNG)
 
+![](diagrama/ERD3.PNG)
 
 # Validaciones 
 

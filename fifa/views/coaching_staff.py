@@ -1,15 +1,9 @@
-from django.shortcuts import render, get_object_or_404
-
-# Create your views here.
 from rest_framework.response import Response
 
-# from rest_framework.views import viewsets
 from rest_framework import viewsets, status, generics
 
-from rest_framework.decorators import api_view
 from fifa.serializers import CoachingStaffSerializer
-from fifa.models import Team, Country, CoachingStaff
-from rest_framework.decorators import action
+from fifa.models import Team, Country, CoachingStaff, Player
 from fifa.utils import (
     validate_country,
     validate_team,
@@ -24,8 +18,6 @@ from fifa.utils import (
     validate_nacionality_exist,
     calculate_age,
 )
-from fifa.models import Player
-from django.http import HttpResponse
 
 
 class CoachingStaffViewSet(viewsets.ModelViewSet):

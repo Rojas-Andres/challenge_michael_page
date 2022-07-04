@@ -4,8 +4,7 @@ from django.urls import path
 
 from fifa.views import team, country, player, coaching_staff, fifa_endpoints
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
+
 router = routers.DefaultRouter()
 router.register(r"team", team.TeamViewSet)
 router.register(r"player", player.PlayerViewSet)
