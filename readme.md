@@ -7,7 +7,7 @@ Versión django: `3.1.7`
 #### Configuración del proyecto (Linux/Windows)
 
 git clone https://github.com/Rojas-Andres/challenge_michael_page
-cd rebus
+cd challenge_michael_page
 
 ### Cree virtulenv
     primero instale virtualenv
